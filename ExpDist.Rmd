@@ -1,0 +1,69 @@
+---
+output: pdf_document
+---
+
+#Statistical Inference Course Project
+
+Composed by: Akihiro Hayashi (21/03/2015)
+
+
+The project consists of two parts:
+
+1. A simulation exercise.
+
+2. Basic inferential data analysis.
+
+Requirements:
+
+1. Show the sample mean and compare it to the theoretical mean of the distribution.
+
+2. Show how variable the sample is (via variance) and compare it to the theoretical variance of the distribution.
+3. Show that the distribution is approximately normal.
+
+Processes of this report: Make simulation ---> Calculate and compare the mean ---> Calculate and compare the sd ---> Test the distribution
+
+##1. Simulation
+
+```{r}
+set.seed(0412) #this is my birthday!
+n <- 40
+lambda <- 0.2
+nosim <- 1000
+sim <- rexp(n = n * nosim, rate = lambda)
+sim.df <- as.data.frame(matrix(sim, ncol = 1000, byrow = FALSE))
+```
+
+##2. Mean of Exp
+
+```{r}
+mean <- sapply(sim.df, mean)
+hist(mean, prob = TRUE)
+sam.mean <- mean(sim)
+theo.mean <- 1/lambda
+abline(v = mean(sim), lwd = 3, col = 3)
+abline(v = 1/lambda, lwd = 3, col = 20)
+```
+
+The sample mean (`r sam.mean`) and theoretical mean (`r theo.mean`) are very close to each other, and the means of each group seems like normal distribution.
+
+##3. Sd of Exp
+
+```{r}
+sd <- sapply(sim.df, sd)
+hist(sd, prob = TRUE)
+sam.sd <- sd(sim)
+theo.sd <- 1/lambda
+abline(v = sd(sim), lwd = 3, col = 3)
+abline(v = 1/lambda, lwd = 3, col = 20)
+```
+
+The sample sd (`r sam.sd`) and theoretical sd (`r theo.sd`) are very close to each other, and the sd of each group seems like normal distribution.
+
+##4. Show distribution
+
+```{r}
+qqnorm(mean)
+qqline(mean)
+```
+
+From Normal Q-Q plot above, we can say the distribution of sample mean is normal distribution. And the result fits the Central Limit Theorem.
